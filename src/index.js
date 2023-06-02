@@ -1,4 +1,4 @@
-import { fetchBreeds, renderBreedsSelect } from "./cat-api";
+import { fetchBreeds } from "./cat-api";
 import { fetchCatByBreed } from "./cat-api";
 import { renderMarkupCat } from "./cat-api";
 import Notiflix from "notiflix";
@@ -10,7 +10,7 @@ const showError = () => {
     error.hidden = true;
     Notiflix.Notify.failure(error.textContent)
     loader.hidden = true;
-    breedSelect.hidden = true;
+    breedSelect.hidden = false;
     catInfo.hidden = true;
 }
 const showLoader = () => {

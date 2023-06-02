@@ -1,5 +1,6 @@
-import { fetchBreeds } from "./cat-api";
+import { fetchBreeds, renderBreedsSelect } from "./cat-api";
 import { fetchCatByBreed } from "./cat-api";
+import { renderMarkupCat } from "./cat-api";
 import Notiflix from "notiflix";
 const breedSelect = document.querySelector(".breed-select");
 const loader = document.querySelector("p.loader");
@@ -31,28 +32,20 @@ const showBreedSelectInfo = () => {
     catInfo.hidden = false;
 }
 showLoader()
-const renderBreeds = (list) => {
-    const markup = list.map(element => {
-        return `<option value="${element.id}">${element.name}</option>`
-    })
-    return markup
-}
-fetchBreeds().then(result => breedSelect.insertAdjacentHTML("afterbegin", renderBreeds(result).join(""))).then(showBreedSelect()).catch(()=>{showError()});
+fetchBreeds().then((result) =>{ 
+    let markup = result.map(element=> {return `<option value="${element.id}">${element.name}</option>`});
+    breedSelect.insertAdjacentHTML("afterbegin", markup.join(""))
+})
+.then(()=>{showBreedSelect()})
+.catch(()=>{showError()})
+
 breedSelect.addEventListener("change", () => {
     showLoader();
-    fetchCatByBreed(breedSelect.value).then((result) => {
+    fetchCatByBreed(breedSelect.value)
+    .then((result) => {
         let catInfoData = {info: result[0].breeds[0], image: result[0].url}
-        console.log(catInfoData);
-    let catInfoMarkup = `<div class="container"><div class="img-container">
-    <img class="cat-img" src="${catInfoData["image"]}" width="600" alt="${catInfoData["info"].name}">
-    </div>
-    <div class="info-container">
-        <h1 class="cat-name">${catInfoData["info"].name}</h1>
-        <p>${catInfoData["info"].description}</p>
-        <p><strong>Temperament</strong>: ${catInfoData["info"].temperament}</p>
-    </div></div>`
-    catInfo.insertAdjacentHTML("afterbegin", catInfoMarkup);
-    showBreedSelectInfo();
+        renderMarkupCat(catInfoData, catInfo);
+        showBreedSelectInfo();
     }
     ).catch(
         ()=>{showError()}

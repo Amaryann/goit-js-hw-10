@@ -8,7 +8,7 @@ export const fetchBreeds = () => {
         return response.json();
     }).catch(
         ()=>{
-            return
+            return  
         }
     )
 }
@@ -21,4 +21,15 @@ export const fetchCatByBreed = (breedId) => {
     }).catch(()=>{
         return
     })
+}
+export const renderMarkupCat = (dataObject, objectTarget) => {
+    let catInfoMarkup = `<div class="container"><div class="img-container">
+    <img class="cat-img" src="${dataObject["image"]}" width="600" alt="${dataObject["info"].name}">
+    </div>
+    <div class="info-container">
+        <h1 class="cat-name">${dataObject["info"].name}</h1>
+        <p>${dataObject["info"].description}</p>
+        <p><strong>Temperament</strong>: ${dataObject["info"].temperament}</p>
+    </div></div>`
+    objectTarget.insertAdjacentHTML("afterbegin", catInfoMarkup);
 }
